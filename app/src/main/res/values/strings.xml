@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">CampusApp</string>
+    <!-- Lab 5: Task 1: My App's Name -->
+    <string name="app_name">Scrapbooking</string>
 </resources>
