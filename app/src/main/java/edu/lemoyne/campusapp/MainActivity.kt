@@ -73,6 +73,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 }
 
+// --- Class 6: Step 2: Preview ---
 @Preview
 @Composable
 fun HomeScreenPreview() {
