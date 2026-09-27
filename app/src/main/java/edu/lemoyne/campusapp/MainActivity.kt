@@ -1,9 +1,12 @@
 package edu.lemoyne.campusapp
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,14 +15,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.pm.ShortcutInfoCompat
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 import edu.lemoyne.campusapp.ui.theme.Purple40
 import edu.lemoyne.campusapp.ui.theme.Purple80
@@ -48,13 +55,24 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(all = 24.dp)
     ) {
+        // --- Lab 6: Task 3: A picture of my own ---
+        Image (
+            painter = painterResource(id = R.drawable.header),
+            contentDescription = "Scrapbooking supplies",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+        )
         // --- Class 6: Step 4: Real styling ---
+        // --- Lab 6: Task 1 ---
         Text(
             text = "Scrapbook Log",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
         )
         Spacer(modifier = Modifier.height(8.dp))
+        // --- Lab 6: Task 1 ---
         Text(
             text = "Pages I have made this year",
             fontSize = 16.sp,
@@ -63,11 +81,19 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // --- Lab 6: Task 1 ---
         Text(text = "Christmas Time 2025", fontSize = 18.sp)
         Text(text = "Mother's Day 2026", fontSize = 18.sp)
         Text(text = "Becca and the Tall Boys Concert", fontSize = 18.sp)
         Text(text = "Move In - Senior Year", fontSize = 18.sp)
 
+        // --- Lab 6 · Task 2: footer ---
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Last updated September 2026",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
     }
 
@@ -79,5 +105,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 fun HomeScreenPreview() {
     CampusAppTheme() {
         HomeScreen()
+    }
+}
+
+// --- Lab 6: Task 4: Dark mode preview
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenDarkPreview() {
+    CampusAppTheme {
+        Surface {
+            HomeScreen()
+        }
     }
 }
