@@ -1,17 +1,35 @@
 package edu.lemoyne.campusapp
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.pm.ShortcutInfoCompat
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
+import edu.lemoyne.campusapp.ui.theme.Purple40
+import edu.lemoyne.campusapp.ui.theme.Purple80
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,29 +38,83 @@ class MainActivity : ComponentActivity() {
         setContent {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Avery",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    HomeScreen(modifier = Modifier.padding(innerPadding))
+
                 }
             }
         }
     }
 }
 
-// --- Class 5: Step 6: my own greeting ---
+// --- Class 6: Step 1: My own screen ---
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
+fun HomeScreen(modifier: Modifier = Modifier) {
+    // ---Class 6: Step 3: A column, so things stack ---
+    Column(
         modifier = modifier
-    )
+            .fillMaxWidth()
+            .padding(all = 24.dp)
+    ) {
+        // --- Lab 6: Task 3: A picture of my own ---
+        Image (
+            painter = painterResource(id = R.drawable.header),
+            contentDescription = "Scrapbooking supplies",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+        )
+        // --- Class 6: Step 4: Real styling ---
+        // --- Lab 6: Task 1 ---
+        Text(
+            text = "Scrapbook Log",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        // --- Lab 6: Task 1 ---
+        Text(
+            text = "Pages I have made this year",
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // --- Lab 6: Task 1 ---
+        Text(text = "Christmas Time 2025", fontSize = 18.sp)
+        Text(text = "Mother's Day 2026", fontSize = 18.sp)
+        Text(text = "Becca and the Tall Boys Concert", fontSize = 18.sp)
+        Text(text = "Move In - Senior Year", fontSize = 18.sp)
+
+        // --- Lab 6 · Task 2: footer ---
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Last updated September 2026",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+    }
+
 }
 
-@Preview(showBackground = true)
+// --- Class 6: Step 2: Preview ---
+@Preview
 @Composable
-fun GreetingPreview() {
+fun HomeScreenPreview() {
+    CampusAppTheme() {
+        HomeScreen()
+    }
+}
+
+// --- Lab 6: Task 4: Dark mode preview
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenDarkPreview() {
     CampusAppTheme {
-        Greeting("Android")
+        Surface {
+            HomeScreen()
+        }
     }
 }
