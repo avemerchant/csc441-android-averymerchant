@@ -88,7 +88,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(all = 24.dp)
     ) {
-        CounterDemo()
+//        CounterDemo()
         Spacer(modifier = Modifier.height(8.dp))
         // --- Lab 6: Task 3: A picture of my own ---
         Image(
