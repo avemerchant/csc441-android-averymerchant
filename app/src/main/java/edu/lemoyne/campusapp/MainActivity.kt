@@ -79,7 +79,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
     }
 
-    // --- Class7: Step 3: What typed lives in state ---
+    // --- Class 7: Step 3: What typed lives in state ---
     var newPage by remember { mutableStateOf("") }
 
     // ---Class 6: Step 3: A column, so things stack ---
@@ -124,18 +124,48 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        // --- Lab 7: Task 4: A live character counter ---
+        Text (
+            text = "${newPage.length} / 40",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
         // Class 7: Step 4: The button changes the state ---
         Button(onClick = {
-            pages.add(newPage)
+            if (newPage.isNotEmpty()) { pages.add(newPage) }
             newPage = ""
         }) {
             Text("Add page")
         }
 
+        // --- Lab 7: Task 1: Remove the last item ---
+        Button(onClick = {
+            if (pages.isNotEmpty()) {
+                pages.removeAt(pages.lastIndex)
+                // pages.removeLast()
+            }
+        }) {
+            Text("Remove Last")
+        }
+
+        // --- Lab 7: Task 3: A "clear all" button
+        Button(onClick = {
+            if (pages.isNotEmpty()) {
+                pages.clear()
+            }
+        }) {
+            Text("Clear All")
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         // --- Class 7: Step 2: Draw whatever is in the list ---
-        Text(text = "${pages.size} Pages Created", fontWeight = FontWeight.Bold)
+        // --- Lab 7: Task 2: Singular and plural ---
+        Text(
+            text = if (pages.size == 1) "1 Page Created" else "${pages.size} Pages Created",
+            fontWeight = FontWeight.Bold
+        )
 
         for (page in pages) {
             Text(text = page, fontSize = 18.sp)
