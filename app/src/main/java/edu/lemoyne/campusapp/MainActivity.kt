@@ -1,5 +1,6 @@
 package edu.lemoyne.campusapp
 
+import android.R.attr.text
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Surface
@@ -13,12 +14,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -35,28 +43,55 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreen(modifier = Modifier.padding(innerPadding))
-
                 }
             }
         }
     }
 }
 
+// --- Class 7: Step 1: A counter that remembers ---
+@Composable
+fun CounterDemo() {
+    var count by remember { mutableStateOf(0) }
+
+    Button(
+        onClick = { count++ }
+    ) {
+        Text(text = "Tapped $count times")
+    }
+}
+
 // --- Class 6: Step 1: My own screen ---
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    // --- Class 7: Step 2: The list lives in state
+    val pages = remember {
+        mutableStateListOf(
+            "Christmas Time 2025",
+            "Mother's Day 2026",
+            "Becca and the Tall Boys Concert",
+            "Move In - Senior Year"
+        )
+    }
+
+    // --- Class7: Step 3: What typed lives in state ---
+    var newPage by remember { mutableStateOf("") }
+
     // ---Class 6: Step 3: A column, so things stack ---
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(all = 24.dp)
     ) {
+        CounterDemo()
+        Spacer(modifier = Modifier.height(8.dp))
         // --- Lab 6: Task 3: A picture of my own ---
-        Image (
+        Image(
             painter = painterResource(id = R.drawable.header),
             contentDescription = "Scrapbooking supplies",
             contentScale = ContentScale.Crop,
@@ -81,11 +116,30 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- Lab 6: Task 1 ---
-        Text(text = "Christmas Time 2025", fontSize = 18.sp)
-        Text(text = "Mother's Day 2026", fontSize = 18.sp)
-        Text(text = "Becca and the Tall Boys Concert", fontSize = 18.sp)
-        Text(text = "Move In - Senior Year", fontSize = 18.sp)
+        // --- Class 7: Step 3: Text field
+        OutlinedTextField(
+            value = newPage,
+            onValueChange = { newPage = it },
+            label = { Text("Page Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Class 7: Step 4: The button changes the state ---
+        Button(onClick = {
+            pages.add(newPage)
+            newPage = ""
+        }) {
+            Text("Add page")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // --- Class 7: Step 2: Draw whatever is in the list ---
+        Text(text = "${pages.size} Pages Created", fontWeight = FontWeight.Bold)
+
+        for (page in pages) {
+            Text(text = page, fontSize = 18.sp)
+        }
 
         // --- Lab 6 · Task 2: footer ---
         Spacer(modifier = Modifier.height(24.dp))
@@ -94,9 +148,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-
     }
-
 }
 
 // --- Class 6: Step 2: Preview ---
