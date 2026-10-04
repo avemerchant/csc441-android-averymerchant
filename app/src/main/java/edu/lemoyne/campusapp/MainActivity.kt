@@ -1,5 +1,6 @@
 package edu.lemoyne.campusapp
 
+import android.R.attr.enabled
 import android.R.attr.text
 import android.content.res.Configuration
 import android.os.Bundle
@@ -54,6 +55,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// --- Class 8: Step 2: One rule book ---
+const val MAX_NAME_LENGTH = 40
+
+fun validatePageName(input: String, existing: List<String>): String? {
+    val name = input.trim()
+    return when {
+        name.isEmpty() -> "Enter a name for your page"
+        name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        existing.any { it.equals(name, ignoreCase = true) } -> "\"$name\" is already on the list"
+        else -> null
+    }
+}
+
 // --- Class 7: Step 1: A counter that remembers ---
 @Composable
 fun CounterDemo() {
@@ -82,6 +96,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     // --- Class 7: Step 3: What typed lives in state ---
     var newPage by remember { mutableStateOf("") }
 
+    // --- Class 8: Step 3: The error message lives in state too ---
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     // ---Class 6: Step 3: A column, so things stack ---
     Column(
         modifier = modifier
@@ -99,6 +116,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .height(180.dp)
         )
+
         // --- Class 6: Step 4: Real styling ---
         // --- Lab 6: Task 1 ---
         Text(
@@ -119,23 +137,47 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: Text field
         OutlinedTextField(
             value = newPage,
-            onValueChange = { newPage = it },
-            label = { Text("Page Name") },
+            // --- Class 8: Step 4: The field itself pushes back ---
+            onValueChange = {
+                newPage = it.take(MAX_NAME_LENGTH)
+                errorMessage = null
+            },
+            label = { Text("Page name") },
+            singleLine = true,
+            isError = errorMessage != null,
             modifier = Modifier.fillMaxWidth()
         )
 
+        // --- CLass 8: Step 3: Show the problem ---
+        errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp
+            )
+        }
         // --- Lab 7: Task 4: A live character counter ---
-        Text (
-            text = "${newPage.length} / 40",
+        Text(
+            text = "${newPage.length} / $MAX_NAME_LENGTH",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         // Class 7: Step 4: The button changes the state ---
-        Button(onClick = {
-            if (newPage.isNotEmpty()) { pages.add(newPage) }
-            newPage = ""
-        }) {
+        Button(
+            onClick = {
+                // --- Class 8: Step 3: Check before you add ---
+                val problem = validatePageName(newPage, pages)
+                if (problem == null) {
+                    pages.add(newPage.trim())
+                    newPage = ""
+                } else {
+                    errorMessage = problem
+                }
+            },
+            // --- Class 8: Step 5: The sign on the door, not the lock
+            enabled = newPage.isNotBlank()
+            ) {
             Text("Add page")
         }
 
@@ -149,7 +191,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             Text("Remove Last")
         }
 
-        // --- Lab 7: Task 3: A "clear all" button
+        // --- Lab 7: Task 3: A "clear all" button ---
         Button(onClick = {
             if (pages.isNotEmpty()) {
                 pages.clear()
