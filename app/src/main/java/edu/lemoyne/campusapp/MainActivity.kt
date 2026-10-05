@@ -62,6 +62,10 @@ fun validatePageName(input: String, existing: List<String>): String? {
     val name = input.trim()
     return when {
         name.isEmpty() -> "Enter a name for your page"
+        // --- Lab 8: Task 2: A rule of your own ---
+        name.all { it.isDigit() } -> "A name can't be only numbers"
+        // --- Lab 8: Task 1: A minimum length --
+        name.length < 3 -> "Too short - at least 3 characters"
         name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
         existing.any { it.equals(name, ignoreCase = true) } -> "\"$name\" is already on the list"
         else -> null
