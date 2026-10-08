@@ -33,7 +33,8 @@ Lab 7: Task 5: 3 questions
    at androidx.compose.ui.input.pointer.PointerInputEventProcessor.process-BIzXfog(
    PointerInputEventProcessor.kt:118)
    at androidx.compose.ui.platform.AndroidComposeView.sendMotionEvent-8iAsVTc(
-   AndroidComposeView.andat androidx.compose.ui.platform.AndroidComposeView.handleMotionEvent-8iAsVTc(
+   AndroidComposeView.andat
+   androidx.compose.ui.platform.AndroidComposeView.handleMotionEvent-8iAsVTc(
    AndroidComposeView.android.kt:2629)
    at androidx.compose.ui.platform.AndroidComposeView.dispatchTouchEvent(
    AndroidComposeView.android.kt:2467)
@@ -97,3 +98,11 @@ Lab 8: Task 3: Test your own app
 | "christmas time 2025" | " ' christmas time 2025' is already on the list" | yes |
 | too long | The field cuts me off before I can type more than 40 characters | yes |
 | "    " | THe "Add page" button is greyed out; I can't press it at all | yes |
+
+Week 7, Wednesday
+Lab 9: Task 3: Rotate and write down what happened
+After rotating, I was still on the same screen. If I rotated the phone while I was on the list
+screen, I stayed on the list screen. However, my new list items disappeared.
+For currentScreen we used rememberSaveable to save the state. For my pages variable (trails) we used
+remember. remember caches a value in memory but rememberSaveable extends remember by also saving the
+state so that it survives configuration changes, like screen rotations.
