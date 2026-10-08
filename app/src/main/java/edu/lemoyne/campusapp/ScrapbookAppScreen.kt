@@ -80,11 +80,19 @@ fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
         "home" -> HomeScreen(
             pages = pages,
             onAddPage = { pages.add(it) },
-            onSeeAll = { currentScreen = "list" }
+            onSeeAll = { currentScreen = "list" },
+            // --- Lab 9: Task 2: Wiring it up myself ---
+            onAbout = { currentScreen = "about" }
         )
 
         "list" -> ListScreen(
             pages = pages,
+            onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
+
+        // --- Lab 9: Task 2: Wiring it up myself ---
+        "about" -> AboutScreen(
             onBack = { currentScreen = "home" },
             modifier = modifier
         )
@@ -97,6 +105,8 @@ fun HomeScreen(
     pages: MutableList<String>,
     onAddPage: (String) -> Unit,
     onSeeAll: () -> Unit,
+    // --- Lab 9: Task 2: Wiring it up myself ---
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 3: What typed lives in state ---
@@ -206,6 +216,13 @@ fun HomeScreen(
             Text(text = "See all scrapbook pages")
         }
 
+        // --- Lab 9: Task 2: Wiring it up myself ---
+        Button(
+            onClick = onAbout
+        ) {
+            Text(text = "About")
+        }
+
         // --- Lab 6 · Task 2: footer ---
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -244,9 +261,47 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // --- Lab 9: Task 1: Count on the list screen
+        Text(
+            text = if (pages.size == 1) "1 Page Created" else "${pages.size} Pages Created",
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         for (page in pages) {
             Text(text = page, fontSize = 18.sp)
         }
+    }
+}
+
+// --- Lab 9: Task 2: A third screen
+@Composable
+fun AboutScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack() }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        TextButton(onClick = onBack) {
+            Text("Back")
+        }
+
+        Text(
+            text = "About",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "The list of pages keeps track of the scrapbook pages I've created this year.")
+        Text(text = "Built for CSC 441 by Avery Merchant.")
     }
 }
 
@@ -265,7 +320,9 @@ fun HomeScreenPreview() {
                 )
             },
             onAddPage = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            // --- Lab 9: Task 2: Wiring it up myself ---
+            onAbout = {}
         )
     }
 }
@@ -286,7 +343,9 @@ fun HomeScreenDarkPreview() {
                     )
                 },
                 onAddPage = {},
-                onSeeAll = {}
+                onSeeAll = {},
+                // --- Lab 9: Task 2: Wiring it up myself ---
+                onAbout = {}
             )
         }
     }
@@ -306,6 +365,16 @@ fun ListScreenPreview() {
                     "Move In - Senior Year"
                 )
             },
+            onBack = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AboutScreenPreview() {
+    CampusAppTheme() {
+        AboutScreen(
             onBack = {}
         )
     }
