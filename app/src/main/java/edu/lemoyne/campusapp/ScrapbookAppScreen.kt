@@ -100,6 +100,8 @@ fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
             onBack = { currentScreen = "home" },
             // --- Class 10: Step 4: Only the owner changes the list ---
             onRemove = { pages.remove(it) },
+            // --- Lab 10: Task 2: Remove all, through the owner ---
+            onRemoveAll = { pages.clear() },
             modifier = modifier
         )
 
@@ -253,6 +255,7 @@ fun ListScreen(
     onBack: () -> Unit,
     // --- Class 10: Step 4: A remove button on every row ---
     onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 9: Step 6: The phone's back button goes home too ---
@@ -281,6 +284,13 @@ fun ListScreen(
             fontWeight = FontWeight.Bold
         )
 
+        // --- Lab 10: Task 2: Remove all, through the owner ---
+        if (pages.isNotEmpty()) {
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove All Pages")
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         // --- Class 10: Step 5: The empty case ---
@@ -289,6 +299,13 @@ fun ListScreen(
                 text = "No pages yet. Add one on the home screen.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            // --- Lab 10: Task 1: A way out of the empty screen ---
+            Button(
+                onClick = onBack
+            ) {
+                Text(text = "Add a Page on the Home Screen")
+            }
         } else {
             // --- Class 10: Step 2: A list that scrolls ---
             LazyColumn(
@@ -423,8 +440,9 @@ fun ListScreenPreview() {
                 )
             },
             onBack = {},
+            onRemove = {},
             // --- Class 10: Step 4: A remove button on every row ---
-            onRemove = {}
+            onRemoveAll = {}
         )
     }
 }
@@ -447,7 +465,9 @@ fun ListScreenEmptyPreview() {
         ListScreen(
             pages = emptyList(),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            // --- Lab 10: Task 2: Remove all, through the owner ---
+            onRemoveAll = {}
         )
     }
 }
