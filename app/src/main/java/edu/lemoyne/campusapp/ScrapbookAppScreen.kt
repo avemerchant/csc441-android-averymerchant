@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -102,6 +103,7 @@ fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
             onRemove = { pages.remove(it) },
             // --- Lab 10: Task 2: Remove all, through the owner ---
             onRemoveAll = { pages.clear() },
+            onFabClick = {},
             modifier = modifier
         )
 
@@ -256,6 +258,7 @@ fun ListScreen(
     // --- Class 10: Step 4: A remove button on every row ---
     onRemove: (String) -> Unit,
     onRemoveAll: () -> Unit,
+    onFabClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 9: Step 6: The phone's back button goes home too ---
@@ -321,6 +324,13 @@ fun ListScreen(
                 }
             }
         }
+
+        FloatingActionButton(
+            onClick = { onFabClick() },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
     }
 }
 
@@ -467,7 +477,8 @@ fun ListScreenEmptyPreview() {
             onBack = {},
             onRemove = {},
             // --- Lab 10: Task 2: Remove all, through the owner ---
-            onRemoveAll = {}
+            onRemoveAll = {},
+            onFabClick = {}
         )
     }
 }
