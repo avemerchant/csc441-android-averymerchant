@@ -106,3 +106,20 @@ screen, I stayed on the list screen. However, my new list items disappeared.
 For currentScreen we used rememberSaveable to save the state. For my pages variable (trails) we used
 remember. remember caches a value in memory but rememberSaveable extends remember by also saving the
 state so that it survives configuration changes, like screen rotations.
+
+Week 13, Wednesday: Lab 21
+
+1. MainActivity triggers showcaseViewModel.refresh() during onCreate
+2. The onRefresh callback that is passed into InterestsScreen. ScrapbookAppScreen forwards
+   onRefreshShowcase into onRefresh which MainActivity has attached to showcaseViewModel::refresh.
+   So, tapping the button calls showcaseViewModel.refresh() on the existing instance
+3. MainActivity already owns the ViewModel, so passing onRefresh lets InterestsScreen tell
+   MainActivity to refresh the data without a second ViewModel.
+4. Successful response: the request got to Supabase and succeeded with zero rows. The try block
+   succeeds and emits ShowcaseUiState.Success(emptyList()), which InterestsScreen renders as "No
+   items yet." instead of an error.
+   Network failure: the request cannot complete or an exception is thrown. The try block fails and
+   the catch block accepts the exception and emits ShowcaseUiState.Error(), which displays the error
+   on InterestsScreen instead of crashing.
+5. I verified this by running the app, and comparing the entire displayed list to the displayed list
+   on my website. 

@@ -70,7 +70,7 @@ fun CounterDemo() {
 
 // --- Class 9: Step 2: One owner for the data ---
 @Composable
-fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
+fun ScrapbookAppScreen(showcaseState: ShowcaseUiState, onRefreshShowcase: () -> Unit = {}, modifier: Modifier = Modifier) {
     // --- Class 7: Step 2: The list lives in state ---
     val pages = remember {
         mutableStateListOf(
@@ -92,7 +92,8 @@ fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
             onAddPage = { pages.add(it) },
             onSeeAll = { currentScreen = "list" },
             // --- Lab 9: Task 2: Wiring it up myself ---
-            onAbout = { currentScreen = "about" }
+            onAbout = { currentScreen = "about" },
+            onSupabase = { currentScreen = "supabase" }
         )
 
         "list" -> ListScreen(
@@ -110,6 +111,13 @@ fun ScrapbookAppScreen(modifier: Modifier = Modifier) {
             onBack = { currentScreen = "home" },
             modifier = modifier
         )
+
+        "supabase" -> InterestsScreen(
+            state = showcaseState,
+            onBack = { currentScreen = "home" },
+            onRefresh = onRefreshShowcase,
+            modifier = modifier
+        )
     }
 }
 
@@ -121,6 +129,7 @@ fun HomeScreen(
     onSeeAll: () -> Unit,
     // --- Lab 9: Task 2: Wiring it up myself ---
     onAbout: () -> Unit,
+    onSupabase: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 3: What typed lives in state ---
@@ -229,6 +238,12 @@ fun HomeScreen(
         ) {
             Text(text = "See all scrapbook pages")
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = onSupabase) { Text("Open Supabase") }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         // --- Lab 9: Task 2: Wiring it up myself ---
         Button(
