@@ -112,6 +112,8 @@ fun ScrapbookAppScreen(showcaseState: ShowcaseUiState, onRefreshShowcase: () -> 
             modifier = modifier
         )
 
+
+
         "supabase" -> InterestsScreen(
             state = showcaseState,
             onBack = { currentScreen = "home" },
