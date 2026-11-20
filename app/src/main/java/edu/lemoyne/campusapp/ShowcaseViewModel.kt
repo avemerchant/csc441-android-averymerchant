@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class ShowcaseUiState {
@@ -15,17 +16,17 @@ sealed class ShowcaseUiState {
 class ShowcaseViewModel : ViewModel() {
     private val repository = ShowcaseRepository()
 
-    private val _uiState = MutableStateFlow<ShowcaseUiState>(ShowcaseUiState.Loading)
-    val uiState: StateFlow<ShowcaseUiState> = _uiState
+    private val _state = MutableStateFlow<ShowcaseUiState>(ShowcaseUiState.Loading)
+    val state: StateFlow<ShowcaseUiState> = _state.asStateFlow()
 
     fun refresh() {
         viewModelScope.launch {
-            _uiState.value = ShowcaseUiState.Loading
+            _state.value = ShowcaseUiState.Loading
             try {
                 val items = repository.loadItems()
-                _uiState.value = ShowcaseUiState.Success(items)
+                _state.value = ShowcaseUiState.Success(items)
             } catch (error: Exception) {
-                _uiState.value = ShowcaseUiState.Error(error.message ?: "Network Error")
+                _state.value = ShowcaseUiState.Error(error.message ?: "Network Error")
             }
         }
     }
