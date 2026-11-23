@@ -16,6 +16,7 @@ import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 class MainActivity : ComponentActivity() {
 
     private val showcaseViewModel: ShowcaseViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +25,22 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val showcaseState by showcaseViewModel.state.collectAsStateWithLifecycle()
+            val loginState by loginViewModel.state.collectAsStateWithLifecycle()
+
             showcaseViewModel
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     ScrapbookAppScreen(
                         showcaseState = showcaseState,
+                        loginState = loginState,
                         onRefreshShowcase = showcaseViewModel::refresh,
+                        onLogin = { email, password, navigate ->
+                            loginViewModel.login(email, password) { token ->
+                                showcaseViewModel.setAccessToken(token)
+                                showcaseViewModel.refresh()
+                                navigate()
+                            }
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

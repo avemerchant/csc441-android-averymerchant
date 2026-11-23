@@ -28,6 +28,7 @@ class ShowcaseViewModel : ViewModel() {
     fun refresh() {
         val token = accessToken ?: run {
             _state.value = ShowcaseUiState.Error("Please log-in first")
+            return
         }
 
         viewModelScope.launch {
