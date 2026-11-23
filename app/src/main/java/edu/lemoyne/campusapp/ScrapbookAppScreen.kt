@@ -70,7 +70,13 @@ fun CounterDemo() {
 
 // --- Class 9: Step 2: One owner for the data ---
 @Composable
-fun ScrapbookAppScreen(showcaseState: ShowcaseUiState, onRefreshShowcase: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun ScrapbookAppScreen(
+    showcaseState: ShowcaseUiState,
+    onRefreshShowcase: () -> Unit = {},
+    loginState: LoginUiState,
+    onLogin: (String, String, () -> Unit) -> Unit,
+    modifier: Modifier = Modifier
+) {
     // --- Class 7: Step 2: The list lives in state ---
     val pages = remember {
         mutableStateListOf(
@@ -93,7 +99,7 @@ fun ScrapbookAppScreen(showcaseState: ShowcaseUiState, onRefreshShowcase: () -> 
             onSeeAll = { currentScreen = "list" },
             // --- Lab 9: Task 2: Wiring it up myself ---
             onAbout = { currentScreen = "about" },
-            onSupabase = { currentScreen = "supabase" }
+            onSupabase = { currentScreen = "login" }
         )
 
         "list" -> ListScreen(
@@ -112,10 +118,19 @@ fun ScrapbookAppScreen(showcaseState: ShowcaseUiState, onRefreshShowcase: () -> 
             modifier = modifier
         )
 
-        "supabase" -> InterestsScreen(
+
+        "interests" -> InterestsScreen(
             state = showcaseState,
             onBack = { currentScreen = "home" },
             onRefresh = onRefreshShowcase,
+            modifier = modifier
+        )
+
+        "login" -> LoginScreen(
+            state = loginState,
+            onLogin = { email, password ->
+                onLogin(email, password) { currentScreen = "interests" }
+            },
             modifier = modifier
         )
     }
